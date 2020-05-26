@@ -1,5 +1,7 @@
 # $ docker build -t singularity_in_docker .
 # $ docker run -v $PWD:/mnt --privileged -it singularity_in_docker
+# $ docker tag singularity_in_docker nathanjmorton/singularity_in_docker
+# $ docker push nathanjmorton/singularity_in_docker
 
 # multi-stage build with golang for compiling singularity and singularity-compose
 # golang for singularity

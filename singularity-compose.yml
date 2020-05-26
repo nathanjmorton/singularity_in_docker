@@ -1,6 +1,0 @@
-version: "1.0"
-instances:
-  app:
-    build:
-      context: .
-    
