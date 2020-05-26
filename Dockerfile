@@ -134,7 +134,7 @@ RUN add-apt-repository \
    stable"
 RUN apt-get update && apt-get install -y docker-ce docker-ce-cli containerd.io
 RUN apt-cache madison docker-ce
-RUN docker run hello-world
+# RUN docker run hello-world
 
 # install kubernetes 
 RUN curl -Lo ./kind https://kind.sigs.k8s.io/dl/v0.8.1/kind-$(uname)-amd64
