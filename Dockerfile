@@ -1,3 +1,4 @@
+# docker run -v /var/run/docker.sock:/var/run/docker.sock -v $PWD:/mnt --privileged -it singularity_in_docker
 # $ docker build -t singularity_in_docker .
 # $ docker run -v $PWD:/mnt --privileged -it singularity_in_docker
 # $ docker tag singularity_in_docker nathanjmorton/singularity_in_docker
@@ -117,4 +118,27 @@ RUN curl https://raw.githubusercontent.com/nvm-sh/nvm/v0.34.0/install.sh | bash 
 
 ENV NODE_PATH $NVM_DIR/v$NODE_VERSION/lib/node_modules
 ENV PATH      $NVM_DIR/v$NODE_VERSION/bin:$PATH
+
+# add docker to run kubernetes 
+RUN apt-get update && apt-get install -y \
+    apt-transport-https \
+    ca-certificates \
+    curl \
+    gnupg-agent \
+    software-properties-common
+RUN curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
+RUN apt-key fingerprint 0EBFCD88
+RUN add-apt-repository \
+   "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
+   $(lsb_release -cs) \
+   stable"
+RUN apt-get update && apt-get install -y docker-ce docker-ce-cli containerd.io
+RUN apt-cache madison docker-ce
+RUN docker run hello-world
+
+# install kubernetes 
+RUN curl -Lo ./kind https://kind.sigs.k8s.io/dl/v0.8.1/kind-$(uname)-amd64
+RUN chmod +x ./kind
+RUN mv ./kind /usr/local/bin/kind
+
 
