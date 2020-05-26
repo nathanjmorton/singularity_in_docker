@@ -1,4 +1,4 @@
-# Ubuntu:18.04 with singularity and singularity-compose (includes Golang Anaconda Python Rust Deno and nvm/Node 12 LTS) 
+# Ubuntu:18.04 with singularity and singularity-compose (includes Golang Anaconda Python Rust Deno and nvm/Node 12 LTS as well as Docker and Kubernetes) 
 
 ## Commands to build and get inside the container 
 
