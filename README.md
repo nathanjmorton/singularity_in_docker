@@ -1,4 +1,4 @@
-# Ubuntu:18.04 with singularity and singularity-compose (includes Golang and Anaconda Python)
+# Ubuntu:18.04 with singularity and singularity-compose (includes Golang Anaconda Python Rust Deno and nvm/Node 12 LTS) 
 
 ## Commands to build and get inside the container 
 
@@ -12,5 +12,11 @@ $ docker run -v $PWD:/mnt --privileged -it singularity_in_docker
 ```
 $ singularity --version
 $ singularity-compose --version
+$ go version
+$ python -V
+$ rustup --version
+$ cargo --version 
+$ rustc --version
+$ deno --version
 ```
 

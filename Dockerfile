@@ -8,6 +8,8 @@ FROM golang:1.14.3-buster as singularity-builder
 # python for singularity-compose (anaconda distribution has everything)
 FROM continuumio/anaconda3 as singularity-compose-builder
 
+FROM rust:1.43-buster as rust-builder
+
 # use ubuntu as the base image OS runtime for singularity operations
 FROM ubuntu:18.04 
 ENV DEBIAN_FRONTEND noninteractive
@@ -65,11 +67,50 @@ RUN apt-get install -y curl grep sed dpkg && \
 #install singularity-compose with pip
 RUN pip install singularity-compose
 
-ENTRYPOINT [ "/usr/bin/tini", "--" ]
-CMD [ "/bin/bash" ]
-
-
 # set the workdir; this is where you land in the container 
 WORKDIR /mnt 
 
+# set up rust for fun
+COPY --from=rust-builder /usr/local/rustup /usr/local/rustup
+COPY --from=rust-builder /usr/local/cargo /usr/local/cargo
 
+ENV RUSTUP_HOME=/usr/local/rustup \
+    CARGO_HOME=/usr/local/cargo \
+    PATH=/usr/local/cargo/bin:$PATH \
+    RUST_VERSION=1.43.1
+
+# rustup --version; 
+# cargo --version; 
+# rustc --version;
+
+# install deno 
+RUN cargo install deno
+
+# install nvm and node
+# Replace shell with bash so we can source files
+RUN rm /bin/sh && ln -s /bin/bash /bin/sh
+
+# Install base dependencies
+RUN apt-get update && apt-get install -y -q --no-install-recommends \
+        apt-transport-https \
+        build-essential \
+        ca-certificates \
+        curl \
+        git \
+        libssl-dev \
+        wget \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN mkdir -p /usr/local/nvm
+ENV NVM_DIR /usr/local/nvm 
+ENV NODE_VERSION 12.16.3
+
+# Install nvm with node and npm
+RUN curl https://raw.githubusercontent.com/nvm-sh/nvm/v0.34.0/install.sh | bash \
+    && . $NVM_DIR/nvm.sh \
+    && nvm install $NODE_VERSION \
+    && nvm alias default $NODE_VERSION \
+    && nvm use default
+
+ENV NODE_PATH $NVM_DIR/v$NODE_VERSION/lib/node_modules
+ENV PATH      $NVM_DIR/v$NODE_VERSION/bin:$PATH
