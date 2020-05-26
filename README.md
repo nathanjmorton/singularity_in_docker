@@ -18,5 +18,7 @@ $ rustup --version
 $ cargo --version 
 $ rustc --version
 $ deno --version
+$ nvm --version
+$ node -v
 ```
 
