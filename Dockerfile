@@ -146,3 +146,6 @@ RUN curl -LO https://storage.googleapis.com/kubernetes-release/release/`curl -s 
 RUN chmod +x ./kubectl
 RUN mv ./kubectl /usr/local/bin/kubectl
 
+# install docker-compose for mist.io ce
+RUN curl -L https://github.com/docker/compose/releases/download/1.21.2/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose
+RUN chmod +x /usr/local/bin/docker-compose
